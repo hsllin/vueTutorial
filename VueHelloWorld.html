@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+<div id="app-1">{{message}}</div>
+<div id="app-2">
+    <span v-bind:title="message">
+        float on me to see time!
+    </span>
+</div>
+<div id="app-3">
+    <p v-if="seen">看的见我吗</p>
+</div>
+<div id="app-4">
+    <ol>
+        <li v-for="todo in todos">
+            {{todo.text}}
+        </li>
+    </ol>
+</div>
+<div id="app-5">
+    <P>{{message}}</P>
+    <button v-on:click="reverseMessage">乾坤大挪移</button>
+</div>
+<div id="app-6">
+    <p>{{message}}</p>
+    <input v-model="message">
+
+    </input>
+</div>
+<div id="app-7">
+    <ol>
+        <todo-item v-for="item in list" v-bind:todo="item" v-bind:key="item.id">
+
+        </todo-item>
+    </ol>
+</div>
+<script>
+Vue.component('todo-item', {
+  props: ['todo'],
+  template: '<li>{{todo.text}}</li>'
+})
+  var app = new Vue(
+    {
+      el: '#app-1',
+      data:
+        {message: 'helloWorld'}
+    })
+  var app2 = new Vue(
+    {
+      el: '#app-2',
+      data: {
+        message: '当前时间' + new Date().toDateString()
+      }
+
+    })
+
+  var app3 = new Vue({
+    el: '#app-3',
+    data: {
+      seen: true
+    }
+  })
+  var app4 = new Vue({
+    el: '#app-4',
+    data: {
+      todos: [
+        {text: '读书'},
+        {text: '看报'},
+        {text: '喝茶'}
+      ]
+    }
+  })
+  var app5 = new Vue({
+    el: '#app-5',
+    data: {
+      message: 'hello,小林'
+    },
+    methods: {
+      reverseMessage: function () {
+        this.message = this.message.split().reverse().join('')
+      }
+    }
+  })
+  var app6 = new Vue(
+    {
+      el: '#app-6',
+      data: {
+        message: 'input you message'
+      }
+    }
+  )
+
+  var app7 = new Vue({
+    el: '#app-7',
+    data: {
+      list: [
+        {id: 0, text: 'java'},
+        {id: 1, text: 'javascript'},
+        {id: 2, text: 'css'}
+      ]
+    }
+  })
+
+</script>
+</body>
+</html>
