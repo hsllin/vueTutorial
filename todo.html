@@ -24,56 +24,64 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <div class="panel-body">
-
-                            <ul class="list-group">
-                                <li class="list-group-item" v-for="(todo,index) in todos" v-bind:class="{'completed' :todo.completed}">
-                                    {{todo.title}} {{todoCount}}
-                                    <button class="btn btn-warning" v-on:click="deleteTodo(index)">
-                                        delete
-                                    </button>
-                                    <button class="btn btn-xs pull-right" v-on:click="troggle(todo)" v-bind:class="[todo.completed? 'btn-danger':'btn-success']">
-                                        {{todo.completed?'undo':'completed'}}
-                                    </button>
-                                </li>
-
-                            </ul>
-                            <form v-on:submit.prevent="addTodo(newTodo)">
-                                <div class="form-group">
-                                    <input type="text" v-model="newTodo.title" class="form-control" placeholder="add a new todo">
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-success" type="submit">
-                                        Add todos
-                                    </button>
-                                </div>
-                            </form>
+                            <todo-items :todos="todos">
+                            </todo-items>
+                            <todo-forms :todos="todos">
+                            </todo-forms>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script type="text/x-template" id="todo-items-template">
+        <ul class="list-group">
+                <li class="list-group-item" v-for="(todo,index) in todos" v-bind:class="{'completed' :todo.completed}">
+                    {{todo.title}} {{todoCount}}
+                    <button class="btn btn-warning" v-on:click="deleteTodo(index)">
+                        delete
+                    </button>
+                    <button class="btn btn-xs pull-right" v-on:click="troggle(todo)" v-bind:class="[todo.completed? 'btn-danger':'btn-success']">
+                        {{todo.completed?'undo':'completed'}}
+                    </button>
+                </li>
+
+            </ul>
+    </script>
+    <script type="text/x-template" id="todo-forms-template">
+        <form v-on:submit.prevent="addTodo(newTodo)">
+                <div class="form-group">
+                    <input type="text" v-model="newTodo.title" class="form-control" placeholder="add a new todo">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" type="submit">
+                        Add todos
+                    </button>
+                </div>
+            </form>
+    </script>
     <script>
-        new Vue({
-            el: '#app',
-            data: {
-                message: 'hello vue java',
-                todos: [{
-                    id: '1',
-                    title: 'this is first todo',
-                    completed: true
-                }],
-                newTodo: {
-                    id: null,
-                    title: '',
-                    completed: false
-                }
-            },
+        Vue.component('todo-items', {
+            template: '#todo-items-template',
             computed: {
                 todoCount() {
                     return this.todos.length;
                 }
             },
+            methods: {
+                deleteTodo(index) {
+                    this.todos.splice(index, 1);
+                },
+                troggle(todo) {
+                    todo.completed = !todo.completed;
+                }
+            },
+            props: ['todos'],
+        
+
+        });
+        Vue.component('todo-forms', {
+            template: '#todo-forms-template',
             methods: {
                 addTodo(newTodo) {
                     this.todos.push(newTodo);
@@ -81,14 +89,28 @@
                         id: null,
                         title: ''
                     }
-                },
-                deleteTodo(index) {
-                    this.todos.splice(index, 1);
-                },
-                troggle(todo) {
-                    todo.completed = !todo.completed;
+                }
+            },
+            props: ['todos'],
+            data() {
+                return {
+                    newTodo: {
+                        id: null,
+                        title: '',
+                        completed: false
+                    }
                 }
             }
+        });
+        new Vue({
+            el: '#app',
+            data: {
+                todos: [{
+                    id: '1',
+                    title: 'this is first todo',
+                    completed: true
+                }],
+            },
 
         })
     </script>
